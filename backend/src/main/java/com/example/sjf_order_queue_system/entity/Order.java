@@ -5,6 +5,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Setter
 @Getter
@@ -22,6 +24,11 @@ public class Order {
     @Column(name = "customer_name", nullable = false)
     private String customerName;
 
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "order_items", joinColumns = @JoinColumn(name = "order_id"))
+    @Column(name = "item_name", nullable = false)
+    @Builder.Default
+    private List<String> orderItems = new ArrayList<>();
     @Column(name = "estimated_prep_time", nullable = false)
     private Integer estimatedPrepTime;
 

@@ -5,53 +5,65 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>4.1.2</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <version>4.1.1</version>
+        <relativePath/>
     </parent>
-    <groupId>com.neuralknights</groupId>
-    <artifactId>sjf_order_queue_system</artifactId>
+    <groupId>com.example</groupId>
+    <artifactId>sjf-order-queue-system</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <name>SJF Order Queue System</name>
-    <description>SJF Order Queue System</description>
-    <url/>
-    <licenses>
-        <license/>
-    </licenses>
-    <developers>
-        <developer/>
-    </developers>
-    <scm>
-        <connection/>
-        <developerConnection/>
-        <tag/>
-        <url/>
-    </scm>
+    <description>SJF Order Queue System with Aging</description>
+
     <properties>
         <java.version>21</java.version>
-    </properties>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-h2console</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webmvc</artifactId>
-        </dependency>
 
+        <!-- Patches Tomcat vulnerabilities (CVE-2026-101296 & CVE-2026-101356) -->
+        <tomcat.version>11.0.27</tomcat.version>
+
+        <!-- Patches Jackson Denial of Service vulnerability (CVE-2026-68497) -->
+        <jackson-bom.version>3.1.8</jackson-bom.version>
+        <jackson-2-bom.version>2.21.8</jackson-2-bom.version>
+
+        <!-- Patches Logback path traversal vulnerability (CVE-2026-19880) -->
+        <logback.version>1.6.3</logback.version>
+    </properties>
+
+    <dependencies>
         <!-- PostgreSQL Driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>42.7.14</version>
             <scope>runtime</scope>
+        </dependency>
+
+        <!-- Swagger (OpenAPI) -->
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <scope>runtime</scope>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -59,30 +71,24 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-jpa-test</artifactId>
+            <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-validation-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-webmvc-test</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>2.8.5</version>
         </dependency>
     </dependencies>
 
     <build>
         <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <argLine>-XX:+EnableDynamicAgentLoading</argLine>
+                </configuration>
+            </plugin>
+
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
@@ -125,5 +131,4 @@
             </plugin>
         </plugins>
     </build>
-
 </project>
